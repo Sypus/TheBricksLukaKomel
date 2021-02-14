@@ -1,2 +1,2 @@
-# TheBricksLukaKomel
-Zamujena domaža naloga.
+Luka Komel
+  esc = stops the game
