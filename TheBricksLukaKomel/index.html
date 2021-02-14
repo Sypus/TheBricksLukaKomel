@@ -1,0 +1,350 @@
+<html>
+<head>		
+	<title>The Bricks</title>
+
+	<link rel="shortcut icon" type="image/x-icon" href="favicon.ico" />
+	
+	<link rel="stylesheet" href="src/style.css" type="text/css" media="all" />
+	<script src="jQuery.js"></script>
+
+	<script type="application/javascript">
+	
+	
+	
+	
+	function drawIt() {
+		var x = 250;
+		var y = 150;
+		var dx = parseInt(Math.random()*2+1);
+		dx *= Math.round(Math.random()) ? 1 : -1;
+		var dy = 4;
+		var WIDTH;
+		var HEIGHT;
+		var r=5;
+		var ctx;
+		var canvas;
+		
+		var paddlex;
+		var paddleh;
+		var paddlew;
+		
+		var rightDown = false;
+		var leftDown = false;
+		
+		var bricks;
+		var NROWS;
+		var NCOLS;
+		var BRICKWIDTH;
+		var BRICKHEIGHT;
+		var PADDING;
+
+		var canvasMinX;
+		var canvasMaxX;
+		var f=1;
+		var flag = 0;
+		
+		var tocke;
+
+		//game states
+		var pausa = false;
+		var death = false;
+		var countPaus = 1;
+		var life = 3;
+	
+
+		//timer 
+		let sec = 0;
+		let min = 0;
+
+		//display timer
+		let displaySec = 0;
+		let displayMin = 0;
+
+		function timer(){
+			
+			sec++;
+			if(death == false && pausa == false){
+				if(sec /60 === 1 ){
+					sec = 0;
+					min++;
+				}
+
+				if(sec < 10){
+					displaySec = "0" + sec.toString();
+				}
+				else {
+					displaySec = sec;
+				}
+
+				if(min < 10){
+					displayMin = "0" + min.toString();
+				}
+				else{
+					displayMin = min;
+				}
+
+				document.getElementById("display").innerHTML = displayMin + ":" + displaySec;
+			}
+		}
+
+		function initbricks() 
+		{ 
+			NROWS = 5;
+			NCOLS = 5;
+			BRICKWIDTH = (WIDTH/NCOLS) - 1;
+			BRICKHEIGHT = 15;
+			PADDING = 1;
+			bricks = new Array(NROWS);
+			for (i=0; i < NROWS; i++) 
+			{
+				bricks[i] = new Array(NCOLS);
+				
+				for (j=0; j < NCOLS; j++) 
+				{
+					bricks[i][j]=1;
+					
+				}				
+			}
+		}
+		
+		
+		
+		function onKeyDown(evt) {
+			if (evt.keyCode == 39){
+				rightDown = true;
+				
+			}
+			else if (evt.keyCode == 37){
+				leftDown = true;
+			}else if (evt.keyCode == 27){
+				countPaus++;
+				if(countPaus%2 == 0){
+					pausa = true;
+				}else{
+					pausa = false;
+				}
+			}
+		}
+
+		function onKeyUp(evt) {
+			if (evt.keyCode == 39){
+				rightDown = false;
+			}
+			else if (evt.keyCode == 37){
+				leftDown = false;
+			}
+		}
+		
+		$(document).keydown(onKeyDown);
+		$(document).keyup(onKeyUp); 
+			
+		
+
+		function init() {
+			canvas=document.getElementById('canvas');
+			tocke = 0;
+			ctx = canvas.getContext('2d');
+			WIDTH = $("#canvas").width();
+			HEIGHT = $("#canvas").height();
+			inter = setInterval(draw, 10);
+			time = setInterval(timer , 1000);
+			return time;
+			return inter; 
+		}
+		
+		function init_paddle() {
+			paddlex = (500 / 2)-50;
+			paddleh = 10;
+			paddlew = 100;
+		}
+		function rect(x,y,w,h) {
+			ctx.fillStyle='#45A29E';
+			ctx.beginPath();
+			ctx.rect(x,y,w,h);
+			ctx.closePath();
+			ctx.fill();
+		}
+
+		
+
+		function init_mouse() {
+			canvasMinX = ($("canvas").offset().left)-15;
+ 			canvasMaxX = (canvasMinX + WIDTH) - 90;
+		}
+
+		function onMouseMove(evt) {
+  			if (evt.pageX > canvasMinX && evt.pageX < canvasMaxX) {
+  				if(death == false && pausa == false ){
+    				paddlex = evt.pageX - canvasMinX;
+  				}
+  			}
+		}
+		$(document).mousemove(onMouseMove);
+
+
+		function draw() {
+			ctx.fillStyle='#66FCF1';
+			ctx.clearRect(0, 0, 500, 500);
+			ctx.clearRect(0,0,500,500);
+			ctx.beginPath();
+			ctx.arc(x, y, 10, 0, Math.PI*2, true);
+			ctx.closePath();
+			ctx.fill();
+			if(pausa == true){
+				ctx.fillStyle='	#FFFFFF';
+				ctx.font = "40px Comic Sans MS";
+
+				ctx.fillText("Paused",190, canvas.height/2);
+			}else if(death == true){
+				ctx.fillStyle='	#FFFFFF';
+				ctx.font = "40px Comic Sans MS";
+
+				ctx.fillText("You Died",170, canvas.height/2);
+
+			}
+
+			
+			rect(paddlex, 500-paddleh, paddlew, paddleh);		
+			
+			for (i=0; i < NROWS; i++) 
+			{
+				for (j=0; j < NCOLS; j++) 
+				{
+					if (bricks[i][j] == 1) 
+					{
+						ctx.fillStyle="#66FCF1";
+						rect((j * (BRICKWIDTH + PADDING)) + PADDING,
+						(i * (BRICKHEIGHT + PADDING)) + PADDING,
+						BRICKWIDTH, BRICKHEIGHT);
+					}
+					
+				}
+			}	
+			if(death == false && pausa == false ){
+	
+				if(rightDown){
+					if((paddlex+paddlew) < WIDTH){
+					paddlex += 5;
+					}
+					else{
+					paddlex = WIDTH-paddlew;
+					}
+				}
+				else if(leftDown){
+					if(paddlex>0){
+					paddlex -=5;
+					}
+					else{
+					paddlex=0;
+					}
+				}
+			
+			}
+
+			if (x + dx > 500-r || x + dx < 0+r)
+				dx = -dx;
+			if (y + dy < 0+r)
+				dy = -dy;
+			else if (y + dy > 500-r) {
+				if (x > paddlex && x < paddlex + paddlew) {
+					dx = 8 * ((x-(paddlex+paddlew/2))/paddlew);
+					dy = -dy;
+
+				}
+				else if (x > paddlex && x < paddlex + paddlew)
+					dy = -dy;
+
+
+				else{
+					x = 250;
+					y = 150;
+					dx = parseInt(Math.random()*2+1);
+					dx *= Math.round(Math.random()) ? 1 : -1;
+					life--;
+					$("#life").html(life);
+					console.log(life);
+					if(life == 0){
+						death = true;
+					}
+				}	
+			}
+				
+
+			if (x + dx > 500 -r|| x + dx < 0 +r){
+				dx = -dx;
+			}
+			if (y + dy > 500 -r|| y + dy < 0 +r){
+				dy = -dy;
+			}
+			
+				
+			rowheight = BRICKHEIGHT + PADDING + f/2;
+			colwidth = BRICKWIDTH + PADDING + f/2;
+			row = Math.floor(y/rowheight);
+			col = Math.floor(x/colwidth);
+			
+			if (y < NROWS * rowheight && row >= 0 && col >= 0 && bricks[row][col] > 0) {
+				dy = -dy; bricks[row][col] = bricks[row][col]-1;
+				
+				if(bricks[row][col]==0){
+					tocke += 1;
+					$("#tocke").html(tocke);
+				}	
+			}
+
+
+			if(pausa == false && death == false){
+				x += dx;
+				y += dy;
+
+				
+				
+				
+			}
+			
+			
+			
+
+		}
+		init();
+		init_paddle();
+		init_mouse();
+		initbricks();
+		
+		
+	}
+
+
+	
+	</script>
+
+</head>
+<body onLoad="drawIt()">
+		<div class = "container">
+			<div id = "display">
+				00:00
+			</div>
+		</div>
+	
+		<div id="gameScreen">
+			<canvas id="canvas" width="500" height="500"></canvas>	
+		</div>
+		
+	<div id="wraper">
+		<div id="divTocke">
+		
+			<a class="score">TOČKE:</a>
+			<a id="tocke"> 0 </a>
+		
+		</div>
+
+
+		<div id="divLifes">
+
+			<a class = "lifes">LIFES:</a>
+			<a id="life"> 3 </a>
+
+		</div>
+	</div>
+</body>
+</html>

@@ -1,0 +1,88 @@
+*{
+	padding:0;
+	margin:0;
+}
+
+body{
+	background-color: rgb(31, 40, 51);
+}
+
+#gameScreen{
+	width:500px;
+	height:500px;
+	border:5px solid rgb(197, 198, 199);
+	margin:0px auto;
+	margin-top:50px;
+	background-color:rgb(11, 12, 16);
+}
+
+#divTocke{
+	border:5px solid rgb(197, 198, 199);
+	width:500px;
+	height:90px;
+	margin:100px auto;
+	text-align: center;
+	background-color: rgb(11, 12, 16);
+	float:left;
+	margin-left: ;
+}
+
+#tocke{
+	font-size:75px;
+	color:rgb(102, 252, 241);
+	text-align:center;
+
+}
+
+.score{
+	font-size:75px;
+	color:rgb(102, 252, 241);
+	text-align:center;
+}
+.lifes{
+	font-size:75px;
+	color:rgb(102, 252, 241);
+	text-align:center;
+}
+#life{
+	font-size:75px;
+	color:rgb(102, 252, 241);
+	text-align:center;
+}
+
+
+#stopGame{
+	height: 30px;
+	width:  60px;
+	background-color: white;
+}
+
+#divLifes{
+	border:5px solid rgb(197, 198, 199);
+	width:500px;
+	height:90px;
+	margin:100px auto;
+	margin-left: 50px;
+	text-align: center;
+	background-color: rgb(11, 12, 16);
+	 float: left;
+}
+#wraper {
+    margin: auto;
+  	width: 60%;
+  	padding-left: 50px;
+    overflow: hidden;
+}
+
+.container{
+	height: 50px;
+	width: 100%;
+}
+
+#display{
+	width: 100%;
+	font-size: 80px;
+	text-align: center;
+	color : white;
+	margin: 0px auto;
+}
