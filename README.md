@@ -1,0 +1,2 @@
+# TheBricksLukaKomel
+Zamujena domaža naloga.
